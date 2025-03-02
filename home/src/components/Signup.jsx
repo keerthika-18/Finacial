@@ -4,11 +4,28 @@ const Signup = () => {
     const [email,setEmail] =useState("");
     const[password,setPassword]=useState("");
     const navigate =useNavigate();
-    const handleSubmit= (e)=>{
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        alert("signup sucessfull!");
-        navigate("/");
-    }
+        try {
+            const response = await fetch("http://localhost:5000/signup", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password }),
+            });
+    
+            const data = await response.json();
+            console.log("Signup Response:", data);
+    
+            if (response.ok) {
+                alert("Signup successful!");
+                navigate("/");
+            } else {
+                alert(`Signup failed! ${data.message}`);
+            }
+        } catch (error) {
+            console.error("Error during signup:", error);
+        }
+    };    
     return ( 
         <>
         <div className="flex flex-col items-center min-h-screen bg-gray1\ p=6">
